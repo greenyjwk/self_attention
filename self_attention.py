@@ -1,6 +1,8 @@
 import nibabel as nib
 import torch.nn as nn
 import torch
+from einops import rearrange, reduce, repeat
+
 
 def main(img):
     print("Hello ViT")
