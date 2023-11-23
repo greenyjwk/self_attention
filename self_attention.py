@@ -4,6 +4,7 @@ import torch
 from einops import rearrange, reduce, repeat
 
 
+
 def main(img):
     print("Hello ViT")
 
@@ -11,7 +12,7 @@ def main(img):
     embedder = simpleCNNEmbedder()
     embeddings = embedder(img)
     
-    query_weight = nn.Linear(intput, output)
+    query_weight = nn.Linear(input, output)
     key_weight = nn.Linear(input, output)
     value_weight = nn.Linear(input, output)
     
