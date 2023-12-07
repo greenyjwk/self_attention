@@ -3,6 +3,7 @@ import torch.nn as nn
 from MHSA import SA
 from torchsummary import summary
 from torch.nn.functional import relu
+from ViT import VisionTransformer
 
 class U_Net(nn.Module):
     def __init__(self, n_class):
@@ -24,13 +25,15 @@ class U_Net(nn.Module):
         self.e41 = nn.Conv2d(256, 512, kernel_size=3, padding=1)
         self.e42 = nn.Conv2d(512, 512, kernel_size=3, padding=1)
         self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
-        
+
+        # Connection from Bottom        
         self.e51 = nn.Conv2d(512, 1024, kernel_size=3, padding = 1)
         self.e52 = nn.Conv2d(1024, 1024, kernel_size=3, padding = 1)
-        
-        # Connection from Bottom
-        # self.e52
-        
+
+
+        ## Self-Attention
+        # self.vit = VisionTransformer((1024, 1024), 16, 8, 8, 1024, num_encoder_blocks=6)
+
 
         # Decoder
         # Deconvolution
@@ -77,6 +80,9 @@ class U_Net(nn.Module):
         xe52 = relu(self.e52(xe51))
 
         print(xe52.shape)
+        
+        # N, C, H, W = X.shape
+        # temp = self.vit(xe52)
 
         # Deocder
         xu1 = self.upconv1(xe52)
@@ -111,8 +117,7 @@ def hook_fn(module, input, output):
     print(f"{module.__class__.__name__} output size: {output.size()}")
 
 if __name__ == "__main__":
-    unet = U_Net(2)
-    # print(unet)
+    unet = U_Net(n_class = 2)
     summary(unet)
 
     # Register the hook for all Conv2d layers in the model

@@ -5,9 +5,9 @@ import torch.nn.functional as F
 from torchsummary import summary
 
 class SA(nn.Module):
-    def __init__(self, X, hidden_dim, numOfHead):
+    def __init__(self, hidden_dim, numOfHead):
         super().__init__()
-        Patch, Embedding = X.shape
+        # Patch, Embedding = X.shape
         self.hidden_dim = hidden_dim
         self.num_head = numOfHead
         self.query_weight = []
@@ -15,9 +15,9 @@ class SA(nn.Module):
         self.value_weight = []
         self.softmax = nn.Softmax(dim=-1)
         for _ in range(self.num_head):
-            (self.query_weight).append(nn.Linear(Embedding, Embedding))
-            (self.key_weight).append(nn.Linear(Embedding, Embedding))
-            (self.value_weight).append(nn.Linear(Embedding, Embedding))
+            (self.query_weight).append(nn.Linear(hidden_dim, hidden_dim))
+            (self.key_weight).append(nn.Linear(hidden_dim, hidden_dim))
+            (self.value_weight).append(nn.Linear(hidden_dim, hidden_dim))
         self.linear = nn.Linear(numOfHead * hidden_dim, self.hidden_dim )
 
     def forward(self, X):
